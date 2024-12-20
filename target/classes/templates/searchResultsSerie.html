@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de recherche de séries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .series-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .series-item {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 220px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .series-item:hover {
+            transform: scale(1.05);
+        }
+        .series-item img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .series-item h3 {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .series-item p {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .series-item .first-air-date {
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Séries trouvées</h1>
+
+    <div class="series-list">
+        <div th:each="serie : ${series}">
+            <div class="series-item">
+                <!-- Affichage de l'image de la série -->
+                <img th:src="@{${serie.imageUrl}}" alt="Image de la série">
+                <h3 th:text="${serie.name}"></h3>
+                <p th:text="${serie.overview}"></p>
+                <p class="first-air-date" th:text="${serie.firstAirDate}"></p>
+            </div>
+        </div>
+    </div>
+
+    <a href="/" style="display: block; text-align: center; margin-top: 20px;">Retour à la recherche</a>
+
+</body>
+</html>

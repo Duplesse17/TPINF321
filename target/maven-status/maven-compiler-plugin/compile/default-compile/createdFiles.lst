@@ -1,0 +1,7 @@
+com/example/recherchetonfilm/service/NLPService.class
+com/example/recherchetonfilm/service/TMDbService.class
+com/example/recherchetonfilm/App.class
+com/example/recherchetonfilm/controller/MovieController.class
+com/example/recherchetonfilm/model/Movie.class
+com/example/recherchetonfilm/model/Serie.class
+com/example/recherchetonfilm/model/Actor.class

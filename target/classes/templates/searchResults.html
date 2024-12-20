@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats de recherche de films</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .movie-item {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 220px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .movie-item:hover {
+            transform: scale(1.05);
+        }
+        .movie-item img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .movie-item h3 {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .movie-item p {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .movie-item .release-date {
+            font-size: 0.9em;
+            color: #888;
+        }
+        .movie-item .trailer-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .movie-item .trailer-button:hover {
+            background-color: #e63939;
+        }
+
+        /* Style de la fenêtre modale */
+        .modal {
+            display: none; /* Cacher par défaut */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0); /* Fond sombre */
+            background-color: rgba(0, 0, 0, 0.4); /* Fond semi-transparent */
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 700px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Films trouvés</h1>
+
+    <div class="movie-list">
+        <!-- Boucle pour afficher les films -->
+        <div th:each="movie : ${movies}">
+            <div class="movie-item">
+                <!-- Affichage de l'image du film -->
+                <img th:src="@{${movie.imageUrl}}" alt="Image du film">
+                <h3 th:text="${movie.title}"></h3>
+                <p th:text="${movie.overview}"></p>
+                <p class="release-date" th:text="${movie.releaseDate}"></p>
+                
+                <!-- Bouton pour regarder la bande-annonce -->
+                <button class="trailer-button"
+                        th:if="${movie.trailerUrl != null}"
+                        onclick="openModal('${movie.trailerUrl}')">
+                    Regarder la bande-annonce
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <a href="/" style="display: block; text-align: center; margin-top: 20px;">Retour à la recherche</a>
+
+    <!-- La fenêtre modale pour la bande-annonce -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <iframe id="trailerFrame" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour ouvrir la fenêtre modale et afficher la bande-annonce
+        function openModal(trailerUrl) {
+            var modal = document.getElementById("myModal");
+            var iframe = document.getElementById("trailerFrame");
+
+            // Si l'URL commence par 'https://youtu.be/', on la transforme en format compatible avec l'iframe
+            if (trailerUrl.includes("youtu.be")) {
+                // Extraire l'ID de la vidéo (tout après 'youtu.be/')
+                var videoId = trailerUrl.split("youtu.be/")[1];
+                // Transformer l'URL courte en URL de type 'embed'
+                trailerUrl = "https://www.youtube.com/embed/" + videoId;
+            }
+
+            // Assigner l'URL de la bande-annonce à l'iframe
+            iframe.src = trailerUrl;  
+            modal.style.display = "block";  // Afficher la fenêtre modale
+        }
+
+        // Fonction pour fermer la fenêtre modale
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            var iframe = document.getElementById("trailerFrame");
+            iframe.src = "";  // Vidanger l'iframe pour arrêter la vidéo
+            modal.style.display = "none";  // Fermer la fenêtre modale
+        }
+
+        // Fermer la fenêtre modale si on clique en dehors de la fenêtre
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html>
